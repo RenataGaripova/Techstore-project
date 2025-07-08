@@ -5,18 +5,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>
       {% block title %}{% endblock %}
     </title>
     {% bootstrap_css %}
+    <style>
+      
+    </style>
   </head>
-  <body>
-    {% include "includes/header.html" %}
-    <main>
-      <div class="container py-5">
-        {% block content %}{% endblock %}
-      </div>
-    </main>
-    {% include "includes/footer.html" %}
+  <body class="d-flex flex-column h-100">
+      {% block header %}{% endblock %}
+      <main>
+        <div class="content container py-5">
+          {% block content %}{% endblock %}
+        </div>
+      </main>
+      {% include "includes/footer.html" %}
   </body>
 </html>

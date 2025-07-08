@@ -2,12 +2,22 @@
 {% block title %}
   Home Page
 {% endblock %}
+{% block header %}
+  {% include "includes/header.html" %}
+{% endblock %}
 {% block content %}
-  <div class="row row-cols-1 row-cols-md-3 g-4">
-    {% for category in category_list %}
-      <div class="col">
-        {% include "includes/category_card.html" %}
-      </div>
-    {% endfor %}
+  <div class="container-md" style="max-width: 1000px;">
+    <h2 class="text-center my-4">Welcome to the Gadget Hub!</h2>
+    <h5 class="text-center my-4 text-secondary">Check out the product categories below...</h5>
+    <div class="row row-cols-1 row-cols-md-3 g-3 justify-content-center">
+      {% for category in category_list %}
+        <div class="col">
+          {% include "includes/category_card.html" %}
+        </div>
+      {% endfor %}
+    </div>
+    <div class="d-flex justify-content-center my-4">
+      <a class="fs-5 link-underline-light" href="#">Go to all categories...</a>
+    </div>
   </div>
 {% endblock %}

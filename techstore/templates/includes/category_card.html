@@ -1,8 +1,8 @@
-<div class="card" style="width: 18rem;">
+<div class="card h-100 mx-auto" style="width: 14rem;">
     <img src="{{ category.photo.url }}" class="card-img-top" alt="{{ category.name }}">
     <div class="card-body">
       <h5 class="card-title">{{ category.name }}</h5>
-      <p class="card-text">{{ category.description }}</p>
-      <a href="#" class="btn btn-primary">Shop items...</a>
+      <p class="card-text">{{ category.description|truncatewords:10 }}</p>
+      <a href="{% url 'products:category_products' category.id %}" class="btn btn-primary">Shop items</a>
     </div>
   </div>

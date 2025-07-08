@@ -24,9 +24,12 @@ class Product(models.Model):
     """Product model."""
 
     name = models.CharField(max_length=128)
+    model = models.CharField(max_length=256, blank=True)
+    producer = models.CharField(max_length=128, blank=True)
     description = models.TextField()
     photo = models.ImageField(upload_to='product_images')
     in_stock = models.IntegerField()
+    rating = models.FloatField(blank=True, default=0.0)
     price = models.FloatField(
         validators=[MinValueValidator(1.0)]
     )

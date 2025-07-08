@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}
+  Products Page
+{% endblock %}
+{% block header %}
+  {% include "includes/search_header.html" %}
+{% endblock %}
+{% block content %}
+  <div class="container-fluid">
+    <h5 class="text-center my-4 text-secondary">
+        Products in category: {{ category.name }}
+    </h5>
+    <div class="row">
+      <div class="col-md-2">
+        <div class="list-group">
+          {% include "includes/list_group.html" %}
+        </div>
+      </div>
+      <div class="col-md-10">
+        <div class="row row-cols-1 row-cols-md-3 justify-content-center g-0">
+          {% for product in page_obj %}
+          <div class="col">
+            {% include "includes/product_card.html" %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include "includes/paginator.html" %}
+{% endblock %}
