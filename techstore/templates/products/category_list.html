@@ -2,17 +2,14 @@
 {% block title %}
   Categories Page
 {% endblock %}
-{% block header %}
-  {% include "includes/search_header.html" %}
-{% endblock %}
 {% block content %}
-  <div class="container-md" style="max-width: 1200px;">
+  <div class="container-md my-5" style="max-width: 1200px;">
     <h5 class="text-center my-4 text-secondary">
         Shop through a wide selection of electronic devices, 
         including smartphones, laptops, tablets, 
         headphones, smart home devices, and more.
     </h5>
-    <div class="row row-cols-1 row-cols-md-3 gx-2 gy-3 justify-content-center">
+    <div class="row row-cols-1 row-cols-md-5 g-3 justify-content-start">
       {% for category in page_obj %}
         <div class="col">
           {% include "includes/category_card.html" %}

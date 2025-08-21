@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'products.apps.ProductsConfig',
+    'accounts.apps.AccountsConfig',
+    'carts.apps.CartsConfig',
     'debug_toolbar',
     'django_bootstrap5',
 ]
@@ -81,11 +83,16 @@ WSGI_APPLICATION = 'techstore.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'techstore',
+        'USER': 'techstore',
+        'PASSWORD': '7462',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
+AUTH_USER_MODEL = 'accounts.MyUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -138,6 +145,6 @@ INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
-CATEGORIES_PER_PAGE = 6
+CATEGORIES_PER_PAGE = 8
 
 ITEMS_PER_PAGE = 10

@@ -14,10 +14,10 @@
       
     </style>
   </head>
-  <body class="d-flex flex-column h-100">
-      {% block header %}{% endblock %}
+  <body class="d-flex flex-column" style="min-height: 100vh; background-color: rgb(240,241,242);">
+    {% include "includes/header.html" %}
       <main>
-        <div class="content container py-5">
+        <div class="container-fluid p-0 h-100">
           {% block content %}{% endblock %}
         </div>
       </main>

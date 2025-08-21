@@ -1,8 +1,5 @@
-<ul class="list-group list-group-flush">
-  {% for product in page_obj %}
-    <li class="list-group-item">
-      <!-- <a href="#" class="link-underline-primary">{{ product.model }}</a> -->
-      <input type="submit" name="model-filter" value="{{ product.model }}" class="btn btn-primary">
-    </li>
-  {% endfor %}
-</ul>
+{% load django_bootstrap5 %}
+<form method="get">
+  {% bootstrap_form form %}
+  {% bootstrap_button button_type="submit" content="Filter" %}
+</form>

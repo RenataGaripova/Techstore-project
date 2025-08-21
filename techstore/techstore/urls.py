@@ -17,11 +17,30 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic.edit import CreateView
+from django.urls import include, path, reverse_lazy
+
+
+from products.views import custom_logout
+from .forms import CustomUserCreationForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('products.urls')),
+    path('accounts/', include('accounts.urls')),
+    path('cart/', include('carts.urls')),
+    path('auth/logout/', custom_logout, name='logout'),
+    path('auth/', include('django.contrib.auth.urls')),
+    path(
+        'auth/registration/',
+        CreateView.as_view(
+            template_name='registration/registration_form.html',
+            form_class=CustomUserCreationForm,
+            success_url=reverse_lazy('auth:login'),
+        ),
+        name='registration',
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
