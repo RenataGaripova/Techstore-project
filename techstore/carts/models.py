@@ -8,9 +8,11 @@ class CartQuerySet(models.QuerySet):
     """Cart QuerySet."""
 
     def total_price(self):
+        """Get total price of user's carts."""
         return sum(cart.get_products_price() for cart in self)
 
     def total_quantity(self):
+        """Get total quantity of items in the user's carts."""
         if self:
             return sum(cart.quantity for cart in self)
         return 0
@@ -36,7 +38,14 @@ class Cart(models.Model):
     objects = CartQuerySet().as_manager()
 
     def __str__(self):
+        """Magic method."""
         return f"{self.user.username}'s cart"
 
     def get_products_price(self):
+        """Get the subtotal of a cart."""
         return round(self.product.sell_price * self.quantity, 2)
+
+
+class Wishlist(models.Model):
+    """Wishlist model."""
+    pass

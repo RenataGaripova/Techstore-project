@@ -1,55 +1,83 @@
-from django.shortcuts import redirect, render
+"""Views for working with carts."""
+
+import json
+
+from django.shortcuts import redirect, render, get_object_or_404
+from django.http import JsonResponse
 
 from products.models import Product
 from .models import Cart
 
 
 def cart_add(request, product_slug):
-    """Adding products into the cart."""
-    if request.method == 'POST':
-        product = Product.objects.get(slug=product_slug)
+    """Add products into the cart."""
+    if request.method == "POST":
+        product = get_object_or_404(Product, slug=product_slug)
 
         if request.user.is_authenticated:
-            carts = Cart.objects.filter(user=request.user, product=product)
-            product_quantity = int(request.POST.get('quantity'))
+            carts = Cart.objects.filter(
+                user=request.user,
+                product=product).select_related('product')
+            try:
+                data = json.loads(request.body)
+                prod_quantity = int(data.get('quantity', 1))
+            except (ValueError, TypeError, json.JSONDecodeError):
+                prod_quantity = 1
             if carts.exists():
                 cart = carts.first()
-                if cart:
-                    cart.quantity += product_quantity
-                    cart.save()
+                new_quantity = min(
+                    product.quantity,
+                    cart.quantity + prod_quantity
+                )
+                carts.update(quantity=new_quantity)
             else:
-                Cart.objects.create(
+                new_quantity = min(
+                        product.quantity, prod_quantity)
+
+                cart = Cart.objects.create(
                     user=request.user,
                     product=product,
-                    quantity=product_quantity
+                    quantity=new_quantity,
                 )
 
-        return redirect(request.META['HTTP_REFERER'])
+            return JsonResponse({
+                'success': True,
+                'message': f'Item {product_slug} was added to your cart.'
+                f'Current quantity in cart: {new_quantity}',
+            })
+
+    return JsonResponse({"success": False}, status=400)
 
 
 def cart_change(request, product_slug):
+    """Change products inside the cart."""
     if request.method == 'POST':
-        product = Product.objects.get(slug=product_slug)
+        product = get_object_or_404(Product, slug=product_slug)
 
         if request.user.is_authenticated:
             carts = Cart.objects.filter(user=request.user, product=product)
-            product_quantity = int(request.POST.get('quantity'))
+            prod_quantity = int(request.POST.get('quantity'))
             if carts.exists():
                 cart = carts.first()
-                if cart:
-                    cart.quantity = product_quantity
-                    cart.save()
+                cart.quantity = prod_quantity
+                cart.save()
             else:
                 Cart.objects.create(
                     user=request.user,
                     product=product,
-                    quantity=product_quantity
+                    quantity=prod_quantity
                 )
 
-        return redirect(request.META['HTTP_REFERER'])
+            return JsonResponse({
+                'success': True,
+                'item_quantity': cart.quantity,
+                'cart_total': carts.total_price(),
+                'item-total': cart.get_products_price(),
+            })
 
 
 def cart_remove(request, product_slug):
+    """Remove products from cart."""
     if request.method == 'POST':
         product = Product.objects.get(slug=product_slug)
 
@@ -62,6 +90,7 @@ def cart_remove(request, product_slug):
 
 
 def cart_items(request):
+    """Get cart items."""
     template_name = 'carts/user_cart.html'
     carts = Cart.objects.filter(user=request.user).select_related('product')
     context = {

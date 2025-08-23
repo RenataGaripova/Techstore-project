@@ -17,7 +17,6 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 from django.urls import include, path, reverse_lazy
 
@@ -45,4 +44,4 @@ urlpatterns = [
 
 if settings.DEBUG:
     import debug_toolbar
-    urlpatterns += (path('__debug__/', include(debug_toolbar.urls)),)
+    urlpatterns.insert(0,path(r'__debug__/', include(debug_toolbar.urls)),)

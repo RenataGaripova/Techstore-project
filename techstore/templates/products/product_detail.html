@@ -27,10 +27,10 @@
           <p class="text-muted"> {{ product.info }}</p>
         </div>
         <div class="mb-4">
-          <form method="post" action="{% url 'carts:cart_add' product.slug %}">
+          <form class="cart-form" data-url="{% url 'carts:cart_add' product.slug %}">
             {% csrf_token %}
             <label for="quantity" class="mb-2"><p class="fs-5">Quantity: <span style="color: red">*</span></p></label>
-            <div id="quantity-wrapper" class="mb-4" style="display: flex; align-items: center; border: 1px solid #ddd; padding: 5px 10px; border-radius: 6px; width: fit-content;">
+            <div id="quantity-wrapper"  class="mb-4" style="display: flex; align-items: center; border: 1px solid #ddd; padding: 5px 10px; border-radius: 6px; width: fit-content;">
               <button type="button" id="decrease" style="background: none; border: none; font-size: 20px; cursor: pointer;">−</button>
               <input type="text" id="quantity" name="quantity" value="1" readonly style="width: 40px; text-align: center; border: none; font-size: 16px;" />
               <button type="button" id="increase" style="background: none; border: none; font-size: 20px; cursor: pointer;">+</button>
@@ -39,7 +39,7 @@
             <div class="row">
               <div class="col-6">
                 <div class="d-grid">
-                  <button type="submit" class="btn btn-outline-primary">Add to Cart</a>
+                  <button type="button" class="btn btn-outline-primary add-to-cart">Add to Cart</a>
                 </div>
               </div>
               <div class="col-6">
