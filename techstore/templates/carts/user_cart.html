@@ -9,7 +9,7 @@
     <div class="col-md-8 p-5">
       <h3 class="border-bottom p-3">Your Cart</h3>
       {% for cart in carts %}
-      <div class="mb-3 border-bottom p-3">
+      <div id="cart-wrapper-{{ cart.id }}" class="mb-3 border-bottom p-3" data-cart-id="{{ cart.id }}">
         <div class="row g-0">
           <div class="col-md-3">
             <img src="{{ cart.product.get_coverage_photo.url }}"class="img-fluid" alt="not found" style="max-height: 150px; object-fit: contain;">
@@ -23,15 +23,19 @@
                 <p class="card-text">
                   <small class="text-body-secondary text-decoration-line-through me-3">{{ cart.product.price }}</small><small class="text-body-secondary">{{ cart.product.sell_price }} $</small>
                 </p>
-                <p class="card-text fw-bold text-success">Subtotal: {{ cart.get_products_price }} $</p>
+                <p id="product-total-{{ cart.id }}" class="card-text fw-bold text-success">Subtotal: {{ cart.get_products_price }} $</p>
               {% else %}
                 <p class="card-text">
                   <small class="text-body-secondary">{{ cart.product.sell_price }} $</small>
                 </p>
-                <p id="item-total-{{ cart.id }}" class="card-text fw-bold text-success">Subtotal: {{ cart.get_products_price }} $</p>
+                <p id="product-total-{{ cart.id }}" class="card-text fw-bold text-success">Subtotal: {{ cart.get_products_price }} $</p>
               {% endif %}
               <div>
-                <form class="cart-form" data-url="{% url 'carts:cart_change' cart.product.slug %}">
+                <form 
+                class="cart-form" 
+                data-url="{% url 'carts:cart_change' cart.product.slug %}"
+                data-remove-url="{% url 'carts:cart_remove' cart.product.slug %}"
+                >
                   {% csrf_token %}
                   <div class="row">
                     <div class="col-md-2">
@@ -53,8 +57,9 @@
                     </div>
                   </div>
                   <br>
-                  <button type="button" formaction="{% url 'carts:cart_change' cart.product.slug %}" class="btn btn-outline-primary btn-sm">Save Changes</button>
-                  <button type="button" formaction="{% url 'carts:cart_remove' cart.product.slug %}" class="ms-4 btn btn-outline-danger btn-sm">Remove Item</button>
+                  <button type="button" class="btn btn-outline-danger btn-sm remove-from-cart" data-cart-id="{{ cart.id }}">
+                    Remove Item
+                  </button>
                 </form>
               </div>
             </div>
@@ -66,7 +71,7 @@
     <div class="col-md-4 p-5">
       <h3 class="border-bottom p-3">Order Summary</h3>
       <div class="p-3">
-        <h5>Subtotal: <span id="cart_total" class="text-success">{{ carts.total_price }} $</span></h5>
+        <h5>Subtotal: <span id="cart-total" class="text-success">{{ carts.total_price }} $</span></h5>
         <h5 class="mt-3">Shipping: <span class="text-success">FREE</span></h5>
         <h5 class="mt-3 text-secondary">Tax: calculated in checkout</span></h5>
         <button type="button" class="mt-3 btn btn-outline-dark w-100">Go to Checkout</button>
@@ -75,28 +80,4 @@
     </div>
   </div>
 </div>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    document.querySelectorAll(".quantity-wrapper").forEach(function(wrapper) {
-      const increaseBtn = wrapper.querySelector(".increase");
-      const decreaseBtn = wrapper.querySelector(".decrease");
-      const quantityInput = wrapper.querySelector("input");
-      const maxQuantity = parseInt(wrapper.dataset.max) || 99;
-  
-      increaseBtn.addEventListener("click", function() {
-        let curr = parseInt(quantityInput.value) || 1;
-        if (curr < maxQuantity) {
-          quantityInput.value = curr + 1;
-        }
-      });
-  
-      decreaseBtn.addEventListener("click", function() {
-        let curr = parseInt(quantityInput.value) || 1;
-        if (curr > 1) {
-          quantityInput.value = curr - 1;
-        }
-      });
-    });
-  });
-  </script>
 {% endblock %}

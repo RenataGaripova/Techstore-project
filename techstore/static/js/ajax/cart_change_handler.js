@@ -35,7 +35,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (data.cart_total) {
                     let cartTotalEl = document.getElementById("cart-total");
                     if (cartTotalEl) {
-                        cartTotalEl.textContent = data.cart_total;
+                        cartTotalEl.textContent = data.cart_total + " $";
+                    }
+                }
+                if (data.product_total) {
+                    let itemTotalEl = document.getElementById(`product-total-${data.cart_id}`);
+                    if (itemTotalEl) {
+                        itemTotalEl.textContent = "Subtotal: " + data.product_total + " $";
                     }
                 }
             })

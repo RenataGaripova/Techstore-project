@@ -4,6 +4,7 @@ import json
 
 from django.shortcuts import redirect, render, get_object_or_404
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 from products.models import Product
 from .models import Cart
@@ -55,7 +56,8 @@ def cart_change(request, product_slug):
         product = get_object_or_404(Product, slug=product_slug)
 
         if request.user.is_authenticated:
-            carts = Cart.objects.filter(user=request.user, product=product)
+            user_carts = Cart.objects.filter(user=request.user)
+            carts = user_carts.filter(product=product)
             prod_quantity = int(request.POST.get('quantity'))
             if carts.exists():
                 cart = carts.first()
@@ -70,10 +72,12 @@ def cart_change(request, product_slug):
 
             return JsonResponse({
                 'success': True,
-                'item_quantity': cart.quantity,
-                'cart_total': carts.total_price(),
-                'item-total': cart.get_products_price(),
+                'product_quantity': cart.quantity,
+                'cart_id': cart.id,
+                'cart_total': user_carts.total_price(),
+                'product_total': carts.total_price(),
             })
+    return JsonResponse({"success": False}, status=400)
 
 
 def cart_remove(request, product_slug):
@@ -82,11 +86,17 @@ def cart_remove(request, product_slug):
         product = Product.objects.get(slug=product_slug)
 
         if request.user.is_authenticated:
-            carts = Cart.objects.filter(user=request.user, product=product)
+            user_carts = Cart.objects.filter(user=request.user)
+            carts = user_carts.filter(product=product)
             if carts.exists():
                 carts.delete()
 
-        return redirect(request.META['HTTP_REFERER'])
+            return JsonResponse({
+                "success": True,
+                "cart_total": user_carts.total_price(),
+            })
+
+    return JsonResponse({"success": False}, status=400)
 
 
 def cart_items(request):

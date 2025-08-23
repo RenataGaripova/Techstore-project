@@ -6,7 +6,16 @@
     </a>
   </div>
   <ul class="list-group list-group-flush border-white p-0">
-    <li class="list-group-item border-white"><h5 class="card-title text-success">{{ product.price }} $</h5></li>
+    <li class="list-group-item border-white">
+      <div class="d-flex justify-content-start">
+        {% if product.discount %}
+        <p class="card-text">
+          <small class="text-body-secondary text-decoration-line-through me-3">{{ product.price }}</small>
+        </p>
+        {% endif %}
+        <h5 class="card-title text-success">{{ product.sell_price }} $</h5>
+      </div>
+      </li>    
     <li class="list-group-item border-white"><p class="card-text">Rating: {{ product.product_rating }}</p></li>
   </ul>
   <div class="card-body">
