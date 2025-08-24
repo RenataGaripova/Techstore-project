@@ -1,3 +1,4 @@
+"""Models to work with users."""
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
@@ -45,8 +46,11 @@ class Review(models.Model):
     )
 
     class Meta:
+        """Meta class."""
+
         default_related_name = 'reviews'
-        ordering = ('created_at',)
+        ordering = ('-created_at',)
 
     def __str__(self):
+        """Magic str method."""
         return f'Comment from author {self.author.username}'

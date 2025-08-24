@@ -9,6 +9,9 @@ html, body {
     flex: 1 0 auto;
   }
 
+.base-wrapper {
+  background-color: rgb(240,241,242);
+}
 .bg-white {
   background-color: white;
 }

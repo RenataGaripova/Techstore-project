@@ -4,25 +4,23 @@ document.addEventListener("click", function(e) {
     const csrftoken = csrftokenElem.value;
 
 
-    if (e.target.classList.contains("add-to-cart")) {
+    if (e.target.classList.contains("add-to-wishlist")) {
         const form = e.target.closest(".cart-form");
-        const url = form.dataset.url;
-        const quantity = form.querySelector("[name=quantity]").value;
+        let url = form.dataset.wishlistUrl;
     
         fetch(url, {
             method: "POST",
             headers: {
                 "X-CSRFToken": csrftoken,
-                "X-Requested-With": "XMLHttpRequest",
-                "Content-Type": "application/json"
+                "X-Requested-With": "XMLHttpRequest"
             },
-            body: JSON.stringify({ quantity: quantity })
+            body: ""
         })
         .then(res => res.json())
         .then(data => {
-            console.log("Ответ корзины:", data);
+            console.log("Wishlist answer:", data);
             alert("✅ " + data.message);
         })
-        .catch(err => console.error("Ошибка:", err));
+        .catch(err => console.error("Error:", err));
     }
 });

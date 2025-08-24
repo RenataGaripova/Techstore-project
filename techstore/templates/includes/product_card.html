@@ -19,11 +19,11 @@
     <li class="list-group-item border-white"><p class="card-text">Rating: {{ product.product_rating }}</p></li>
   </ul>
   <div class="card-body">
-    <form class="cart-form" data-url="{% url 'carts:cart_add' product.slug %}">
+    <form class="cart-form" data-url="{% url 'carts:cart_add' product.slug %}" data-wishlist-url="{% url 'carts:wishlist_add' product.slug %}">
       {% csrf_token %}
       <input type="hidden" id="quantity" name="quantity" value="1"/>
       <button type="button" class="btn btn-outline-primary w-100 add-to-cart" >Add to Cart</button>
-      <button type="button" class="btn btn-outline-success w-100 mt-2">Add to Wishlist</button>
+      <button type="button" class="btn btn-outline-success w-100 mt-2 add-to-wishlist">Add to Wishlist</button>
     </form>
   </div>
 </div>

@@ -19,4 +19,15 @@ urlpatterns = [
         name='cart_remove'
     ),
     path('cart_items/', views.cart_items, name='cart_items'),
+    path(
+        'wishlist_add/<slug:product_slug>',
+        views.wishlist_add,
+        name='wishlist_add'
+    ),
+    path(
+        'wishlist_remove/<slug:product_slug>',
+        views.wishlist_remove,
+        name='wishlist_remove'
+    ),
+    path('wishlist_items/', views.wishlist_items, name='wishlist_items'),
 ]

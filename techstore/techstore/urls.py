@@ -29,10 +29,11 @@ urlpatterns = [
     path('', include('products.urls')),
     path('accounts/', include('accounts.urls')),
     path('cart/', include('carts.urls')),
-    path('auth/logout/', custom_logout, name='logout'),
-    path('auth/', include('django.contrib.auth.urls')),
+    path('order/', include('orders.urls')),
+    path('accounts/logout/', custom_logout, name='logout'),
+    path('accounts/', include('django.contrib.auth.urls')),
     path(
-        'auth/registration/',
+        'accounts/registration/',
         CreateView.as_view(
             template_name='registration/registration_form.html',
             form_class=CustomUserCreationForm,
@@ -44,4 +45,4 @@ urlpatterns = [
 
 if settings.DEBUG:
     import debug_toolbar
-    urlpatterns.insert(0,path(r'__debug__/', include(debug_toolbar.urls)),)
+    urlpatterns.insert(0, path(r'__debug__/', include(debug_toolbar.urls)),)

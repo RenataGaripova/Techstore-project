@@ -5,13 +5,16 @@ from django.contrib.auth import get_user_model
 from .models import Review
 
 
+User = get_user_model()
+
+
 class UserForm(forms.ModelForm):
     """Form based on user model."""
 
     class Meta:
         """Meta class."""
 
-        model = get_user_model()
+        model = User
         fields = ('first_name', 'last_name', 'phone_number')
 
 
@@ -29,6 +32,7 @@ class ReviewForm(forms.ModelForm):
         choices=RATING_CHOICES,
         widget=forms.Select()
     )
+
     class Meta:
         """Meta class."""
 

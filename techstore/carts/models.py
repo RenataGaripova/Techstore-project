@@ -1,7 +1,10 @@
+"""Models to work with carts and wishlists."""
 from django.db import models
 from django.contrib.auth import get_user_model
 
 from products.models import Product
+
+User = get_user_model()
 
 
 class CartQuerySet(models.QuerySet):
@@ -22,7 +25,7 @@ class Cart(models.Model):
     """Cart Model."""
 
     user = models.ForeignKey(
-        get_user_model(),
+        User,
         on_delete=models.CASCADE,
         blank=True,
         null=True,
@@ -37,6 +40,11 @@ class Cart(models.Model):
 
     objects = CartQuerySet().as_manager()
 
+    class Meta:
+        """Meta class."""
+
+        ordering = ("-created_timestamp",)
+
     def __str__(self):
         """Magic method."""
         return f"{self.user.username}'s cart"
@@ -48,4 +56,28 @@ class Cart(models.Model):
 
 class Wishlist(models.Model):
     """Wishlist model."""
-    pass
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+    )
+
+    session_key = models.CharField(max_length=32, blank=True, null=True)
+    created_timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ("-created_timestamp",)
+        constraints = [
+            models.constraints.UniqueConstraint(
+                fields=['user', 'product'],
+                name='unique_wishlist_product'
+            ),
+        ]
